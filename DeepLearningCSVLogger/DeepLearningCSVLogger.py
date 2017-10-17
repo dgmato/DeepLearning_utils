@@ -8,9 +8,6 @@
 
 import csv
 import numpy as np
-import sys
-sys.path.insert(0, '/path/to/application/app/folder')
-
 
 # Create CSV file with the column headers of interest
 def createCSVFile(filePath, listOfHeaders):
@@ -19,15 +16,35 @@ def createCSVFile(filePath, listOfHeaders):
     writer = csv.writer(csvfile, delimiter=",")
     writer.writerow(listOfHeaders)
 
-def addRowToCSVFile(path, newRow):
+  csvfile.close()
 
-  csvfile = open(path, 'rb')
+def addRowToCSVFile(filePath, newRow):
+
+  with open(filePath, 'a') as csvfile: # 'a' opens the file for appending; any data written to the file is automatically added to the end.
+    writer = csv.writer(csvfile, delimiter=",")
+    writer.writerow(newRow)
+
+  csvfile.close()
+
+
+def readRowFromCSVFile(filePath, rowID):
+
+  csvfile = open(filePath, 'rb')
   spamreader = csv.reader(csvfile, delimiter=',')
 
-  # row count
-  data = list(spamreader)
-  row_count = len(data)
-  print row_count
+  names = spamreader.next()
+
+  for row in spamreader:
+    print row[0], rowID
+    if float(row[0]) == float(rowID):
+      return row[0], row[1], row[2]
+
+  return -1, -1, -1
+  
+
+
+
+
        
 
 
