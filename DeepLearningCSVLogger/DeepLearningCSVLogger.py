@@ -40,7 +40,45 @@ def readRowFromCSVFile(filePath, rowID):
       return row[0], row[1], row[2]
 
   return -1, -1, -1
+
+def countNumberOfRowsInCSVfile(filePath):
+    
+  csvfile = open(filePath, 'rb')
+  spamreader = csv.reader(csvfile, delimiter=',')
+  row_count = len(list(spamreader))-1 # DO NOT COUNT HEADER ROW
   
+  return row_count
+
+def saveEpochMetricsToCSV(filePath, training_accuracy, training_loss, validation_accuracy, validation_loss):
+    
+  numEpochs = len(training_accuracy)
+    
+  with open(filePath, 'wb') as csvfile:
+    writer = csv.writer(csvfile, delimiter=",")
+    
+    # Generate Headers
+    listOfHeaders = ['METRIC'] # 'TRAIN ACC', 'TRAIN LOSS', 'VAL ACC', 'VAL LOSS', 'LR']
+    row_TrainAcc = ['TRAIN_ACC']
+    row_TrainLoss = ['TRAIN_LOSS']
+    row_ValAcc = ['VAL_ACC']
+    row_ValLoss = ['VAL_LOSS']
+    #row_LR = ['LR']
+    for i in range(numEpochs):
+      listOfHeaders.append('EPOCH_' + str(i+1))
+      row_TrainAcc.append(training_accuracy[i])
+      row_TrainLoss.append(training_loss[i])
+      row_ValAcc.append(validation_accuracy[i])
+      row_ValLoss.append(validation_loss[i])
+      #row_LR.append(learning_rate[i])
+        
+    writer.writerow(listOfHeaders)
+    writer.writerow(row_TrainAcc)
+    writer.writerow(row_TrainLoss)
+    writer.writerow(row_ValAcc)
+    writer.writerow(row_ValLoss)
+    #writer.writerow(row_LR)
+    
+    csvfile.close()
 
 
 
